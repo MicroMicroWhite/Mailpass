@@ -23,7 +23,7 @@ export interface MessageSummary {
   raw_size: number
 }
 export interface MessageDetail extends MessageSummary { text_body: string; html_body: string }
-export interface AddressStat { address: string; total: number; unread: number }
+export interface AddressStat { address: string; domain: string; total: number; unread: number; last_received_at: string }
 export interface MailConfig { site_name: string; domain?: string; domains: string[]; smtp_port?: number; smtp_enabled: boolean }
 export interface InboxData { items: MessageSummary[]; total: number; unread: number; allTotal: number; addresses: AddressStat[]; config: MailConfig }
 export interface ToastState { message: string; error?: boolean }

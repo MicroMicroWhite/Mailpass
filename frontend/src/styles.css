@@ -66,6 +66,19 @@ svg { flex-shrink: 0; }
 .address-label { margin-top: 34px; }
 .address-label > span:last-child { font-size: 11px; font-variant-numeric: tabular-nums; }
 .address-list { flex: 1; min-height: 48px; overflow-y: auto; padding: 0 13px 12px; }
+.address-domain-group { margin-bottom: 9px; }
+.address-domain-heading { display: flex; align-items: center; justify-content: space-between; width: 100%; min-height: 31px; padding: 0 9px; color: var(--secondary); border-radius: 6px; text-align: left; }
+.address-domain-heading:hover { background: var(--hover); color: var(--text); }
+.address-domain-heading > span, .address-domain-meta { display: flex; align-items: center; gap: 6px; min-width: 0; }
+.address-domain-heading strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 11px; font-weight: 600; }
+.address-domain-meta { color: var(--muted); }
+.address-domain-meta small { font-size: 10px; font-variant-numeric: tabular-nums; }
+.address-domain-items { padding: 2px 0 0 5px; }
+.old-address-toggle { display: flex; align-items: center; justify-content: space-between; width: 100%; min-height: 30px; padding: 4px 11px 4px 36px; color: var(--muted); border-radius: 6px; font-size: 10px; text-align: left; }
+.old-address-toggle:hover { background: var(--hover); color: var(--secondary); }
+.old-address-toggle > span:last-child { display: flex; align-items: center; gap: 5px; font-variant-numeric: tabular-nums; }
+.old-address-toggle svg { transition: transform .16s; }
+.rotate-180 { transform: rotate(180deg); }
 .address-item { display: flex; align-items: center; gap: 10px; width: 100%; padding: 10px 11px; border-radius: 7px; text-align: left; color: var(--secondary); }
 .address-item:hover { background: var(--hover); }
 .address-item.active { background: var(--blue-soft); color: var(--blue); }
@@ -98,6 +111,8 @@ svg { flex-shrink: 0; }
 .breadcrumb strong { font-weight: 500; color: var(--text); }
 .private-badge { padding: 3px 6px; border: 1px solid var(--line); border-radius: 4px; color: var(--secondary); font-size: 10px; line-height: 1; }
 .connection-label { display: inline-flex; align-items: center; gap: 7px; font-size: 11px; color: var(--secondary); margin-right: 9px; }
+.cleanup-button { display: inline-flex; align-items: center; gap: 6px; min-height: 31px; padding: 0 9px; border: 1px solid var(--line-strong); border-radius: 7px; color: var(--secondary); font-size: 11px; }
+.cleanup-button:hover:not(:disabled) { background: var(--blue-soft); border-color: #b7cdf8; color: var(--blue); }
 .topbar-avatar { width: 29px; height: 29px; }
 .mobile-menu { display: none; }
 .workspace-body { display: flex; flex-direction: column; flex: 1; min-height: 0; padding: 31px 32px 0; }
@@ -295,6 +310,20 @@ button.metric:hover { border-color: var(--line-strong); background: var(--subtle
 .address-preview strong { font-size: 14px; font-weight: 500; color: var(--blue); overflow-wrap: anywhere; user-select: all; }
 .dialog-submit { width: 100%; min-height: 42px; }
 .dialog-actions { display: flex; justify-content: flex-end; gap: 9px; margin-top: 22px; }
+.text-button { padding: 4px 0; color: var(--blue); font-size: 11px; }
+.text-button:hover { text-decoration: underline; }
+.cleanup-domain-heading { display: flex; align-items: center; justify-content: space-between; margin-top: 20px; }
+.cleanup-domain-heading .field-label { margin: 0; }
+.cleanup-domains { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 7px; padding: 9px; border: 1px solid var(--line); border-radius: 8px; background: var(--subtle); }
+.cleanup-domain-option { display: flex; align-items: center; gap: 8px; min-width: 0; padding: 6px; border-radius: 5px; color: var(--secondary); font-size: 12px; cursor: pointer; }
+.cleanup-domain-option:hover { background: var(--hover); color: var(--text); }
+.cleanup-domain-option input { position: absolute; width: 1px; height: 1px; opacity: 0; }
+.cleanup-checkbox { display: grid; place-items: center; width: 17px; height: 17px; flex-shrink: 0; border: 1px solid var(--line-strong); border-radius: 4px; color: transparent; background: var(--surface); }
+.cleanup-domain-option input:checked + .cleanup-checkbox { border-color: var(--blue); color: #fff; background: var(--blue); }
+.cleanup-domain-option input:focus-visible + .cleanup-checkbox { outline: 3px solid var(--blue); outline-offset: 2px; }
+.cleanup-domain-option > span:last-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cleanup-summary { display: flex; align-items: center; gap: 8px; min-height: 42px; margin-top: 16px; padding: 0 11px; border: 1px solid var(--line); border-radius: 8px; color: var(--secondary); background: var(--subtle); font-size: 11px; }
+.cleanup-summary svg { color: #d75a5a; }
 .delete-icon { display: grid; place-items: center; width: 45px; height: 45px; margin: 15px 0; color: #da5656; background: #da565610; border-radius: 12px; }
 .navigation-dialog { padding: 0; width: 290px; height: 100dvh; max-height: 100dvh; margin: 0 auto 0 0; border-radius: 0 14px 14px 0; background: var(--sidebar); }
 .navigation-dialog > .dialog-heading { padding: 18px 19px 0; margin-bottom: 0; }
@@ -401,6 +430,8 @@ button.metric:hover { border-color: var(--line-strong); background: var(--subtle
   .workspace-body { padding: 23px 18px 0; }
   .topbar { padding: 0 18px; }
   .topbar-right { gap: 10px; }
+  .cleanup-button { width: 40px; height: 40px; padding: 0; justify-content: center; border-color: transparent; }
+  .cleanup-button span { display: none; }
   .connection-label { display: none; }
   .page-heading { margin-bottom: 23px; gap: 12px; }
   .page-heading h1 { font-size: 26px; }
@@ -461,6 +492,7 @@ button.metric:hover { border-color: var(--line-strong); background: var(--subtle
 @media (max-width: 479px) {
   .workspace-body { padding: 21px 13px 0; }
   .topbar { padding: 0 14px; height: 57px; }
+  .cleanup-button { width: 38px; height: 38px; }
   .breadcrumb-home, .breadcrumb-chevron { display: none; }
   .page-heading { padding: 0 3px; margin-bottom: 20px; }
   .page-heading h1 { font-size: 25px; }
@@ -500,6 +532,7 @@ button.metric:hover { border-color: var(--line-strong); background: var(--subtle
   .metric { padding: 11px 10px; }
   .metric-icon { display: none; }
   .new-address-button span { font-size: 10px; }
+  .cleanup-button { width: 34px; height: 34px; }
   .page-heading h1 { font-size: 23px; }
   .reader-actions { gap: 0; }
   .reader-actions .icon-button { width: 31px; }

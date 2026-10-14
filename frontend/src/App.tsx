@@ -4,6 +4,7 @@ import type { MessageDetail as MailMessageDetail, MessageSummary, ToastState, No
 import { API, cn, copyText, formatDate, PAGE_SIZE, REFRESH_INTERVALS, readStorage, senderInfo, writeStorage } from './lib'
 import { useInbox } from './useInbox'
 import AddressDialog from './components/AddressDialog'
+import CleanupDialog from './components/CleanupDialog'
 import Login from './components/Login'
 import MessageDetail from './components/MessageDetail'
 import Sidebar from './components/Sidebar'
@@ -53,6 +54,7 @@ function Workspace({ accessKey, onLogout, dark, onToggleTheme, notify, siteName 
   const [detailVersion, setDetailVersion] = useState(0)
   const [mobileNav, setMobileNav] = useState(false)
   const [addressDialog, setAddressDialog] = useState(false)
+  const [cleanupDialog, setCleanupDialog] = useState(false)
   const [deleteDialog, setDeleteDialog] = useState<boolean>(false)
   const [busy, setBusy] = useState(false)
   const [isMobile, setIsMobile] = useState(() => window.matchMedia('(max-width: 767px)').matches)
@@ -150,7 +152,7 @@ function Workspace({ accessKey, onLogout, dark, onToggleTheme, notify, siteName 
     <a className="skip-link" href="#mailbox">跳至邮件列表</a>
     <aside className="sidebar"><Sidebar {...sidebarProps} /></aside>
     <main className="workspace-main">
-      <header className="topbar"><div className="breadcrumb"><IconButton label="打开导航" className="mobile-menu" onClick={() => setMobileNav(true)}><PanelLeft size={20} /></IconButton><span className="breadcrumb-home">Workspace</span><ChevronRight className="breadcrumb-chevron" size={14} /><strong>Mail management</strong><span className="private-badge">Private</span></div><div className="topbar-right"><span className="connection-label"><span className={cn('status-dot', (data.error || !data.config.smtp_enabled) && 'status-muted')} />{data.error ? '连接中断' : data.config.smtp_enabled ? '收件服务已启用' : data.lastUpdated ? '收件服务已暂停' : '正在连接'}</span><ThemeButton dark={dark} onToggle={onToggleTheme} /><span className="topbar-avatar" aria-label={`当前工作空间：${siteName}`}>{siteName.slice(0, 1).toUpperCase()}</span></div></header>
+      <header className="topbar"><div className="breadcrumb"><IconButton label="打开导航" className="mobile-menu" onClick={() => setMobileNav(true)}><PanelLeft size={20} /></IconButton><span className="breadcrumb-home">Workspace</span><ChevronRight className="breadcrumb-chevron" size={14} /><strong>Mail management</strong><span className="private-badge">Private</span></div><div className="topbar-right"><span className="connection-label"><span className={cn('status-dot', (data.error || !data.config.smtp_enabled) && 'status-muted')} />{data.error ? '连接中断' : data.config.smtp_enabled ? '收件服务已启用' : data.lastUpdated ? '收件服务已暂停' : '正在连接'}</span><button className="cleanup-button" onClick={() => setCleanupDialog(true)} disabled={!data.config.domains?.length}><Trash2 size={15} /><span>清理邮件</span></button><ThemeButton dark={dark} onToggle={onToggleTheme} /><span className="topbar-avatar" aria-label={`当前工作空间：${siteName}`}>{siteName.slice(0, 1).toUpperCase()}</span></div></header>
       <div className="workspace-body">
         <section className="page-heading"><div><div className="eyebrow">MAIL OVERVIEW</div><h1 title={address || undefined}>{pageTitle}<span className="heading-dot">.</span></h1><p>{address ? address : '每一封来信，尽在掌握。'}</p></div><button className="button button-primary new-address-button" onClick={() => setAddressDialog(true)} disabled={!data.config.domains?.length}><Plus size={17} /><span>新建收件地址</span></button></section>
         <section className="overview" aria-label="邮箱概览"><button className={cn('metric', !address && !unreadOnly && 'metric-active')} onClick={() => navigate()}><span className="metric-icon"><Inbox size={20} strokeWidth={1.6} /></span><span className="metric-info"><span>全部邮件</span><strong>{data.allTotal.toLocaleString()}<small>封</small></strong></span><span className="metric-note">所有来信，统一收录</span><ChevronRight size={15} className="metric-arrow" /></button><button className={cn('metric', unreadOnly && 'metric-active')} onClick={() => navigate('', true)}><span className="metric-icon blue"><Mail size={20} strokeWidth={1.6} /></span><span className="metric-info"><span>未读邮件</span><strong>{data.unread.toLocaleString()}<small>封</small></strong></span><span className="metric-note">{data.unread ? '留一点时间，看看新消息' : '所有来信都已阅览'}</span><ChevronRight size={15} className="metric-arrow" /></button><div className="metric"><span className="metric-icon green"><AtSign size={20} strokeWidth={1.6} /></span><span className="metric-info"><span>收件地址</span><strong>{data.addresses.length.toLocaleString()}<small>个</small></strong></span><span className="metric-note">随用随收，自由命名</span></div></section>
@@ -169,6 +171,7 @@ function Workspace({ accessKey, onLogout, dark, onToggleTheme, notify, siteName 
     </main>
     {mobileNav && <Dialog title="工作空间" onClose={() => setMobileNav(false)} className="navigation-dialog"><Sidebar {...sidebarProps} /></Dialog>}
     {addressDialog && <AddressDialog domains={data.config.domains || []} onClose={() => setAddressDialog(false)} notify={notify} />}
+    {cleanupDialog && <CleanupDialog domains={data.config.domains || []} api={data.api} notify={notify} onClose={() => setCleanupDialog(false)} onCleaned={() => data.refresh(true)} />}
     {deleteDialog && <Dialog title="删除这封邮件？" onClose={() => { if (!busy) setDeleteDialog(false) }}><div className="delete-icon"><Trash2 size={23} /></div><p className="dialog-description">「{selected?.subject || '(无主题)'}」将被永久删除，此操作无法撤销。</p><div className="dialog-actions"><button className="button button-secondary" onClick={() => setDeleteDialog(false)} disabled={busy}>保留邮件</button><button className="button button-danger" onClick={deleteMessage} disabled={busy}>{busy ? <LoaderCircle size={16} className="spin" /> : <Trash2 size={16} />}确认删除</button></div></Dialog>}
   </div>
 }

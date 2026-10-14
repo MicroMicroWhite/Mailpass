@@ -8,7 +8,7 @@ import re
 import secrets
 import sqlite3
 from contextlib import asynccontextmanager, contextmanager
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from email import message_from_bytes
 from email.header import decode_header, make_header
 from email.policy import default
@@ -320,6 +320,11 @@ class AccessKeyRequest(BaseModel):
     key: str
 
 
+class CleanupRequest(BaseModel):
+    older_than_days: int = Field(default=7, ge=1, le=3650)
+    domains: list[str] = Field(default_factory=list)
+
+
 @app.get("/api/health")
 def health() -> dict[str, Any]:
     return {"status": "ok", "site_name": SITE_NAME, "domain": MAIL_DOMAINS[0], "domains": list(MAIL_DOMAINS), "smtp_enabled": SMTP_ENABLED, "access_key_configured": bool(ACCESS_KEY)}
@@ -372,14 +377,18 @@ def list_messages(
 @app.get("/api/addresses")
 def list_addresses() -> list[dict[str, Any]]:
     with db() as connection:
-        rows = connection.execute("SELECT recipients, is_read FROM messages ORDER BY datetime(received_at) DESC").fetchall()
-    counts: dict[str, dict[str, int]] = {}
+        rows = connection.execute("SELECT recipients, is_read, received_at FROM messages ORDER BY datetime(received_at) DESC").fetchall()
+    counts: dict[str, dict[str, Any]] = {}
     for row in rows:
         for address in json.loads(row["recipients"] or "[]"):
-            item = counts.setdefault(address, {"total": 0, "unread": 0})
+            normalized = address.strip().lower()
+            domain = normalized.rsplit("@", 1)[-1] if "@" in normalized else ""
+            item = counts.setdefault(normalized, {"total": 0, "unread": 0, "domain": domain, "last_received_at": row["received_at"]})
             item["total"] += 1
             item["unread"] += int(not row["is_read"])
-    return [{"address": address, **values} for address, values in sorted(counts.items())]
+            if row["received_at"] > item["last_received_at"]:
+                item["last_received_at"] = row["received_at"]
+    return [{"address": address, **values} for address, values in sorted(counts.items(), key=lambda item: item[1]["last_received_at"], reverse=True)]
 
 
 @app.get("/api/messages/{message_id}")
@@ -414,3 +423,47 @@ def delete_all_messages() -> dict[str, Any]:
     with db() as connection:
         cursor = connection.execute("DELETE FROM messages")
     return {"ok": True, "deleted": cursor.rowcount}
+
+
+def cleanup_message_ids(payload: CleanupRequest) -> tuple[list[int], str]:
+    domains = {
+        item.strip().lower().lstrip("@").rstrip(".")
+        for item in payload.domains
+        if item.strip()
+    }
+    if not domains:
+        raise HTTPException(status_code=400, detail="至少选择一个收件域名")
+    unknown = domains.difference(MAIL_DOMAINS)
+    if unknown:
+        raise HTTPException(status_code=400, detail="包含未配置的收件域名")
+
+    cutoff = datetime.now(timezone.utc) - timedelta(days=payload.older_than_days)
+    cutoff_value = cutoff.isoformat()
+    with db() as connection:
+        rows = connection.execute("SELECT id, recipients, received_at FROM messages WHERE received_at < ?", (cutoff_value,)).fetchall()
+    ids: list[int] = []
+    for row in rows:
+        recipients = json.loads(row["recipients"] or "[]")
+        if any(recipient.rsplit("@", 1)[-1].strip().lower().rstrip(".") in domains for recipient in recipients if "@" in recipient):
+            ids.append(int(row["id"]))
+    return ids, cutoff_value
+
+
+@app.post("/api/messages/cleanup/preview")
+def preview_cleanup(payload: CleanupRequest) -> dict[str, Any]:
+    ids, cutoff = cleanup_message_ids(payload)
+    return {"count": len(ids), "cutoff": cutoff}
+
+
+@app.post("/api/messages/cleanup")
+def cleanup_messages(payload: CleanupRequest) -> dict[str, Any]:
+    ids, cutoff = cleanup_message_ids(payload)
+    deleted = 0
+    if ids:
+        with db() as connection:
+            for start in range(0, len(ids), 500):
+                batch = ids[start : start + 500]
+                placeholders = ",".join("?" for _ in batch)
+                cursor = connection.execute(f"DELETE FROM messages WHERE id IN ({placeholders})", batch)
+                deleted += cursor.rowcount
+    return {"ok": True, "deleted": deleted, "cutoff": cutoff}
