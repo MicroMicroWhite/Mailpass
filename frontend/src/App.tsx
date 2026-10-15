@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { ArrowDown, AtSign, ChevronRight, CircleAlert, Copy, Inbox, LoaderCircle, Mail, PanelLeft, Paperclip, Plus, Search, Trash2, X } from 'lucide-react'
+import { ArrowDown, AtSign, ChevronRight, CircleAlert, Copy, Inbox, LoaderCircle, Mail, MailOpen, PanelLeft, Paperclip, Plus, Search, Trash2, X } from 'lucide-react'
 import type { MessageDetail as MailMessageDetail, MessageSummary, ToastState, Notify } from './lib'
 import { API, cn, copyText, formatDate, PAGE_SIZE, REFRESH_INTERVALS, readStorage, senderInfo, writeStorage } from './lib'
 import { useInbox } from './useInbox'
@@ -136,6 +136,17 @@ function Workspace({ accessKey, onLogout, dark, onToggleTheme, notify, siteName 
     } catch (error) { notify(error.message, true) }
     finally { setBusy(false) }
   }
+  async function markAllRead() {
+    if (!data.unread || busy) return
+    setBusy(true)
+    try {
+      const result = await data.api('/messages/read', { method: 'PATCH' })
+      setSelected((current) => current ? { ...current, is_read: true } : current)
+      await data.refresh(true)
+      notify(result.updated ? `已将 ${result.updated} 封未读邮件标为已读` : '没有未读邮件')
+    } catch (error) { notify(error instanceof Error ? error.message : '标为已读失败，请稍后重试', true) }
+    finally { setBusy(false) }
+  }
   async function deleteMessage() {
     if (!selected || busy) return
     setBusy(true)
@@ -157,7 +168,7 @@ function Workspace({ accessKey, onLogout, dark, onToggleTheme, notify, siteName 
         <section className="page-heading"><div><div className="eyebrow">MAIL OVERVIEW</div><h1 title={address || undefined}>{pageTitle}<span className="heading-dot">.</span></h1><p>{address ? address : '每一封来信，尽在掌握。'}</p></div><button className="button button-primary new-address-button" onClick={() => setAddressDialog(true)} disabled={!data.config.domains?.length}><Plus size={17} /><span>新建收件地址</span></button></section>
         <section className="overview" aria-label="邮箱概览"><button className={cn('metric', !address && !unreadOnly && 'metric-active')} onClick={() => navigate()}><span className="metric-icon"><Inbox size={20} strokeWidth={1.6} /></span><span className="metric-info"><span>全部邮件</span><strong>{data.allTotal.toLocaleString()}<small>封</small></strong></span><span className="metric-note">所有来信，统一收录</span><ChevronRight size={15} className="metric-arrow" /></button><button className={cn('metric', unreadOnly && 'metric-active')} onClick={() => navigate('', true)}><span className="metric-icon blue"><Mail size={20} strokeWidth={1.6} /></span><span className="metric-info"><span>未读邮件</span><strong>{data.unread.toLocaleString()}<small>封</small></strong></span><span className="metric-note">{data.unread ? '留一点时间，看看新消息' : '所有来信都已阅览'}</span><ChevronRight size={15} className="metric-arrow" /></button><div className="metric"><span className="metric-icon green"><AtSign size={20} strokeWidth={1.6} /></span><span className="metric-info"><span>收件地址</span><strong>{data.addresses.length.toLocaleString()}<small>个</small></strong></span><span className="metric-note">随用随收，自由命名</span></div></section>
         <section id="mailbox" className={cn('mailbox', selectedId !== null && 'has-selection')} aria-label="收件箱">
-          <div className="mail-list-pane"><div className="mailbox-toolbar"><div className="segmented" aria-label="邮件筛选"><button className={!unreadOnly ? 'selected' : ''} aria-pressed={!unreadOnly} onClick={() => { setUnreadOnly(false); setPage(0) }}>全部<span>{address ? data.addresses.find((item) => item.address === address)?.total ?? 0 : data.allTotal}</span></button><button className={unreadOnly ? 'selected' : ''} aria-pressed={unreadOnly} onClick={() => { setUnreadOnly(true); setPage(0) }}>未读<span>{address ? data.addresses.find((item) => item.address === address)?.unread ?? 0 : data.unread}</span></button></div><div className="list-tools"><label className="search-field"><Search size={16} /><input ref={searchRef} value={query} onChange={(event) => { setQuery(event.target.value); setSelectedId(null) }} placeholder="搜索邮件…" aria-label="搜索发件人、主题或正文" />{query ? <IconButton label="清除搜索" onClick={() => setQuery('')}><X size={14} /></IconButton> : <kbd>⌘ K</kbd>}</label><RefreshControl interval={data.refreshInterval} nextRefreshAt={data.nextRefreshAt} refreshing={data.refreshing || data.loading} onIntervalChange={data.setRefreshInterval} onRefresh={data.refresh} /></div></div>
+          <div className="mail-list-pane"><div className="mailbox-toolbar"><div className="segmented" aria-label="邮件筛选"><button className={!unreadOnly ? 'selected' : ''} aria-pressed={!unreadOnly} onClick={() => { setUnreadOnly(false); setPage(0) }}>全部<span>{address ? data.addresses.find((item) => item.address === address)?.total ?? 0 : data.allTotal}</span></button><button className={unreadOnly ? 'selected' : ''} aria-pressed={unreadOnly} onClick={() => { setUnreadOnly(true); setPage(0) }}>未读<span>{address ? data.addresses.find((item) => item.address === address)?.unread ?? 0 : data.unread}</span></button></div><div className="list-tools"><button type="button" className="mark-all-read" onClick={markAllRead} disabled={busy || !data.unread} aria-label="将全部未读邮件标为已读" title="将全部未读邮件标为已读">{busy ? <LoaderCircle size={14} className="spin" /> : <MailOpen size={14} />}<span>全部已读</span></button><label className="search-field"><Search size={16} /><input ref={searchRef} value={query} onChange={(event) => { setQuery(event.target.value); setSelectedId(null) }} placeholder="搜索邮件…" aria-label="搜索发件人、主题或正文" />{query ? <IconButton label="清除搜索" onClick={() => setQuery('')}><X size={14} /></IconButton> : <kbd>⌘ K</kbd>}</label><RefreshControl interval={data.refreshInterval} nextRefreshAt={data.nextRefreshAt} refreshing={data.refreshing || data.loading} onIntervalChange={data.setRefreshInterval} onRefresh={data.refresh} /></div></div>
           {address && <div className="filter-strip"><AtSign size={13} /><span title={address}>{address}</span><IconButton label="清除地址筛选" onClick={() => navigate('', unreadOnly)}><X size={13} /></IconButton><IconButton label="复制当前地址" onClick={() => copy(address)}><Copy size={13} /></IconButton></div>}
           {data.error && <div className="error-banner" role="alert"><CircleAlert size={16} /><span>{data.error}</span><button onClick={() => data.refresh()}>重试</button></div>}
           <div className="mail-table-header" aria-hidden="true"><span>发件人</span><span>邮件主题</span><span>收件地址</span><span>时间<ArrowDown size={12} /></span></div>

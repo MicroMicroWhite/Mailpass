@@ -145,6 +145,8 @@ button.metric:hover { border-color: var(--line-strong); background: var(--subtle
 .segmented > button.selected { color: var(--text); background: var(--surface); box-shadow: 0 1px 3px #00000012; font-weight: 550; }
 .segmented > button > span { font-size: 10px; color: var(--muted); }
 .list-tools { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.mark-all-read { display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; gap: 6px; min-height: 33px; padding: 0 9px; border: 1px solid var(--line-strong); border-radius: 6px; color: var(--secondary); background: var(--surface); font-size: 11px; white-space: nowrap; }
+.mark-all-read:hover:not(:disabled) { border-color: #b7cdf8; color: var(--blue); background: var(--blue-soft); }
 .search-field { display: flex; align-items: center; gap: 8px; min-width: 0; height: 33px; width: 230px; padding: 0 9px; border: 1px solid var(--line); border-radius: 6px; color: var(--muted); background: var(--subtle); transition: border-color .2s, box-shadow .2s; }
 .search-field:focus-within, .input-wrap:focus-within, .select-input:focus { border-color: var(--blue); box-shadow: 0 0 0 3px #3375ed12; }
 .search-field input { width: 100%; border: 0; color: var(--text); font-size: 12px; background: transparent; }
@@ -153,7 +155,7 @@ button.metric:hover { border-color: var(--line-strong); background: var(--subtle
 .search-field .icon-button { width: 20px; height: 24px; }
 .refresh-control { --refresh-size: 34px; display: inline-flex; flex-shrink: 0; height: var(--refresh-size); border: 1px solid var(--line-strong); border-radius: 7px; background: var(--surface); box-shadow: 0 1px 2px #00000004; transition: border-color .16s, box-shadow .16s; }
 .refresh-control.is-open { border-color: var(--blue); box-shadow: 0 0 0 3px #3375ed12; }
-.refresh-settings { display: inline-flex; align-items: center; gap: 7px; padding: 0 9px; border-radius: 6px 0 0 6px; color: var(--secondary); }
+.refresh-settings { display: inline-flex; align-items: center; gap: 7px; padding: 0 14px 0 9px; border-radius: 6px 0 0 6px; color: var(--secondary); }
 .refresh-settings:hover, .is-open .refresh-settings { background: var(--subtle); color: var(--text); }
 .refresh-timer { color: var(--blue); }
 .refresh-countdown { min-width: 38px; font-size: 12px; font-variant-numeric: tabular-nums; font-weight: 550; letter-spacing: .3px; text-align: center; }
@@ -304,7 +306,7 @@ button.metric:hover { border-color: var(--line-strong); background: var(--subtle
 .field-error { color: #d05252; font-size: 12px; margin: 9px 0 0; }
 .field-hint { font-size: 11px; color: var(--muted); line-height: 1.7; margin: 12px 0 0; }
 .domain-select-label { margin-top: 18px; }
-.select-input { display: block; width: 100%; height: 43px; padding: 0 10px; border: 1px solid var(--line-strong); border-radius: 8px; background: var(--surface); color: var(--text); font-size: 14px; }
+.select-input { display: block; width: 100%; height: 43px; padding: 0 38px 0 10px; appearance: none; -webkit-appearance: none; border: 1px solid var(--line-strong); border-radius: 8px; background-color: var(--surface); background-image: linear-gradient(45deg, transparent 50%, var(--muted) 50%), linear-gradient(135deg, var(--muted) 50%, transparent 50%); background-position: calc(100% - 22px) 50%, calc(100% - 17px) 50%; background-size: 5px 5px; background-repeat: no-repeat; color: var(--text); font-size: 14px; }
 .address-preview { display: flex; flex-direction: column; gap: 9px; background: var(--subtle); padding: 15px; margin: 22px 0; border: 1px solid var(--line); border-radius: 9px; }
 .address-preview > span { font-size: 11px; color: var(--muted); }
 .address-preview strong { font-size: 14px; font-weight: 500; color: var(--blue); overflow-wrap: anywhere; user-select: all; }

@@ -25,7 +25,7 @@ After adding a domain, addresses such as `hello@example.com` and `test@example.c
 ## Features
 
 - **Catch-all mail**: Receive mail at any address across multiple domains without creating individual mailboxes.
-- **Mail management**: Search messages and filter by recipient or unread status.
+- **Mail management**: Search messages, filter by recipient or unread status, and mark all unread messages as read with one click.
 - **Web interface**: Desktop and mobile support, with light and dark themes.
 - **Access control**: Sign in with a shared access key.
 - **Deployment**: Offline Docker packages for amd64 and arm64, with mail stored in SQLite on a persistent volume.

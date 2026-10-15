@@ -391,6 +391,13 @@ def list_addresses() -> list[dict[str, Any]]:
     return [{"address": address, **values} for address, values in sorted(counts.items(), key=lambda item: item[1]["last_received_at"], reverse=True)]
 
 
+@app.patch("/api/messages/read")
+def mark_all_messages_read() -> dict[str, Any]:
+    with db() as connection:
+        cursor = connection.execute("UPDATE messages SET is_read = 1 WHERE is_read = 0")
+    return {"ok": True, "updated": cursor.rowcount}
+
+
 @app.get("/api/messages/{message_id}")
 def get_message(message_id: int) -> dict[str, Any]:
     with db() as connection:
