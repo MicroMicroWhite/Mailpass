@@ -2,6 +2,7 @@ import { useEffect, useId, useRef } from 'react'
 import type { ButtonHTMLAttributes, ReactNode } from 'react'
 import { Check, CircleAlert, Inbox, LoaderCircle, Mail, Moon, Sun, X } from 'lucide-react'
 import { cn, senderInfo } from '../lib'
+import { useI18n } from '../i18n'
 
 interface IconButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> { label: string; children: ReactNode }
 export function IconButton({ label, children, className, type = 'button', ...props }: IconButtonProps) {
@@ -14,6 +15,11 @@ export function Brand({ compact = false, name = 'Mailpass' }: { compact?: boolea
 
 export function ThemeButton({ dark, onToggle }: { dark: boolean; onToggle: () => void }) {
   return <IconButton label={dark ? '切换浅色模式' : '切换深色模式'} onClick={onToggle}>{dark ? <Sun size={18} /> : <Moon size={18} />}</IconButton>
+}
+
+export function LanguageButton() {
+  const { language, toggleLanguage } = useI18n()
+  return <button type="button" className="language-button" onClick={toggleLanguage} aria-label={language === 'zh' ? '切换语言' : 'Change language'}>{language === 'zh' ? 'EN' : '中'}</button>
 }
 
 export function Avatar({ sender, large = false }: { sender: string; large?: boolean }) {

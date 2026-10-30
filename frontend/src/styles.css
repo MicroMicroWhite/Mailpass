@@ -38,6 +38,8 @@ svg { flex-shrink: 0; }
 .button-danger:hover:not(:disabled) { background: #c43c3c; }
 .icon-button { display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; width: 32px; height: 32px; border-radius: 7px; color: var(--secondary); }
 .icon-button:hover:not(:disabled) { background: var(--hover); color: var(--text); }
+.language-button { border: 1px solid var(--border); background: transparent; color: var(--secondary); border-radius: 7px; min-width: 32px; height: 32px; padding: 0 7px; font-size: 11px; font-weight: 700; letter-spacing: .03em; cursor: pointer; }
+.language-button:hover { background: var(--hover); color: var(--text); }
 .danger-hover:hover:not(:disabled) { background: #e6515112; color: #db5555; }
 .status-dot { display: inline-block; flex-shrink: 0; width: 6px; height: 6px; border-radius: 50%; background: var(--green); }
 .status-muted { background: var(--muted); }
