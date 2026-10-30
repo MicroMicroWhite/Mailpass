@@ -2,10 +2,10 @@
 
 <h1>Mailpass</h1>
 <p>A self-hosted temporary mailbox for your own domains.</p>
-<p><a href="README_CN.md">简体中文</a> · <a href="#quick-start">Quick start</a> · <a href="https://github.com/1273082756/Mailpass/releases/latest">Latest release</a> · <a href="docs/RELEASING.md">Release guide</a></p>
+<p><a href="README_CN.md">简体中文</a> · <a href="#quick-start">Quick start</a> · <a href="https://github.com/MicroMicroWhite/Mailpass/releases/latest">Latest release</a> · <a href="docs/RELEASING.md">Release guide</a></p>
 
 <p>
-  <a href="https://github.com/1273082756/Mailpass/releases/latest"><img src="https://img.shields.io/github/v/release/1273082756/Mailpass?style=flat-square&amp;color=3375ed" alt="Latest release"></a>
+  <a href="https://github.com/MicroMicroWhite/Mailpass/releases/latest"><img src="https://img.shields.io/github/v/release/MicroMicroWhite/Mailpass?style=flat-square&amp;color=3375ed" alt="Latest release"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-green?style=flat-square" alt="MIT License"></a>
   <img src="https://img.shields.io/badge/React-19-149eca?style=flat-square" alt="React 19">
   <img src="https://img.shields.io/badge/Python-3.11-3776ab?style=flat-square" alt="Python 3.11">
@@ -77,7 +77,7 @@ You need a Linux server with **Docker and Docker Compose v2**, plus a receiving 
 
 ### Use a deployment package (recommended)
 
-Download the package for your architecture and its `.sha256` file from [Releases](https://github.com/1273082756/Mailpass/releases/latest):
+Download the package for your architecture and its `.sha256` file from [Releases](https://github.com/MicroMicroWhite/Mailpass/releases/latest):
 
 | Server architecture | Deployment package |
 | --- | --- |
@@ -107,7 +107,7 @@ docker compose logs backend
 <summary>Build from source</summary>
 
 ```bash
-git clone https://github.com/1273082756/Mailpass.git
+git clone https://github.com/MicroMicroWhite/Mailpass.git
 cd Mailpass
 cp .env.example .env
 # Edit MAIL_DOMAINS and other settings
@@ -195,10 +195,10 @@ This project is licensed under the [MIT License](LICENSE). You can use, modify, 
 
 ## Star History
 
-<a href="https://star-history.com/#1273082756/Mailpass&Date">
+<a href="https://star-history.com/#MicroMicroWhite/Mailpass&Date">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=1273082756/Mailpass&amp;type=Date&amp;theme=dark">
-    <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=1273082756/Mailpass&amp;type=Date">
-    <img alt="Mailpass star history chart" src="https://api.star-history.com/svg?repos=1273082756/Mailpass&amp;type=Date" width="100%">
+    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=MicroMicroWhite/Mailpass&amp;type=Date&amp;theme=dark">
+    <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=MicroMicroWhite/Mailpass&amp;type=Date">
+    <img alt="Mailpass star history chart" src="https://api.star-history.com/svg?repos=MicroMicroWhite/Mailpass&amp;type=Date" width="100%">
   </picture>
 </a>

@@ -18,7 +18,7 @@ gh auth login --hostname github.com --web --scopes workflow
 仓库目前使用 SSH remote；Git 推送仍需可用的 SSH 密钥。需要改用本机的 CLI 登录凭据时：
 
 ```bash
-git remote set-url origin https://github.com/1273082756/Mailpass.git
+git remote set-url origin https://github.com/MicroMicroWhite/Mailpass.git
 gh auth setup-git
 ```
 

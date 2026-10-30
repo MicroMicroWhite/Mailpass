@@ -2,10 +2,10 @@
 
 <h1>Mailpass</h1>
 <p>一个可以自部署的临时邮箱，使用自己的域名收件。</p>
-<p><a href="README.md">English</a> · <a href="#快速开始">快速开始</a> · <a href="https://github.com/1273082756/Mailpass/releases/latest">下载最新版本</a> · <a href="docs/RELEASING.md">发布指南</a></p>
+<p><a href="README.md">English</a> · <a href="#快速开始">快速开始</a> · <a href="https://github.com/MicroMicroWhite/Mailpass/releases/latest">下载最新版本</a> · <a href="docs/RELEASING.md">发布指南</a></p>
 
 <p>
-  <a href="https://github.com/1273082756/Mailpass/releases/latest"><img src="https://img.shields.io/github/v/release/1273082756/Mailpass?style=flat-square&amp;color=3375ed" alt="Latest release"></a>
+  <a href="https://github.com/MicroMicroWhite/Mailpass/releases/latest"><img src="https://img.shields.io/github/v/release/MicroMicroWhite/Mailpass?style=flat-square&amp;color=3375ed" alt="Latest release"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-green?style=flat-square" alt="MIT License"></a>
   <img src="https://img.shields.io/badge/React-19-149eca?style=flat-square" alt="React 19">
   <img src="https://img.shields.io/badge/Python-3.11-3776ab?style=flat-square" alt="Python 3.11">
@@ -77,7 +77,7 @@
 
 ### 使用部署包（推荐）
 
-从 [Releases](https://github.com/1273082756/Mailpass/releases/latest) 下载对应架构的部署包和 `.sha256` 校验文件：
+从 [Releases](https://github.com/MicroMicroWhite/Mailpass/releases/latest) 下载对应架构的部署包和 `.sha256` 校验文件：
 
 | 服务器架构 | 部署包 |
 | --- | --- |
@@ -107,7 +107,7 @@ docker compose logs backend
 <summary>从源码构建</summary>
 
 ```bash
-git clone https://github.com/1273082756/Mailpass.git
+git clone https://github.com/MicroMicroWhite/Mailpass.git
 cd Mailpass
 cp .env.example .env
 # 编辑 MAIL_DOMAINS 和其他配置
@@ -195,10 +195,10 @@ docker-compose.yml        源码部署配置
 
 ## Star 趋势
 
-<a href="https://star-history.com/#1273082756/Mailpass&Date">
+<a href="https://star-history.com/#MicroMicroWhite/Mailpass&Date">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=1273082756/Mailpass&amp;type=Date&amp;theme=dark">
-    <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=1273082756/Mailpass&amp;type=Date">
-    <img alt="Mailpass GitHub Star 数量历史趋势图" src="https://api.star-history.com/svg?repos=1273082756/Mailpass&amp;type=Date" width="100%">
+    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=MicroMicroWhite/Mailpass&amp;type=Date&amp;theme=dark">
+    <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=MicroMicroWhite/Mailpass&amp;type=Date">
+    <img alt="Mailpass GitHub Star 数量历史趋势图" src="https://api.star-history.com/svg?repos=MicroMicroWhite/Mailpass&amp;type=Date" width="100%">
   </picture>
 </a>
